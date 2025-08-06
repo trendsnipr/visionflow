@@ -327,6 +327,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+  const BASE_URL = "https://visionflow-backend.onrender.com";  // Only change this
 function showPage(page) {
   document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
   document.getElementById(page + '-page').style.display = 'block';
@@ -511,7 +512,7 @@ function register() {
   signUpBtn.disabled = true;
   loginBtn.disabled = true;
   signUpBtn.textContent = "Signing Up...";
-  fetch("http://127.0.0.1:5000/register", {
+  fetch("${BASE_URL}/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -563,7 +564,7 @@ function login() {
   signUpBtn.disabled = true;
   loginBtn.disabled = true;
   loginBtn.textContent = "Logging In...";
-  fetch("http://127.0.0.1:5000/login", {
+  fetch("${BASE_URL}/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -623,7 +624,7 @@ async function handleChatSubmit(e) {
   document.getElementById("chat-box").innerHTML += `<p><strong>You:</strong> ${message}</p>`;
   document.getElementById("user-input").value = "";
   try {
-    const res = await fetch("http://127.0.0.1:5000/chat", {
+    const res = await fetch("${BASE_URL}/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: fullPrompt, tool, email: loggedInUser.email })
@@ -660,7 +661,7 @@ function saveFavorite(question, answer) {
     alert("Please login to save favorites.");
     return;
   }
-  fetch("http://127.0.0.1:5000/save-favorite", {
+  fetch("${BASE_URL}/save-favorite", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question, answer, email: loggedInUser.email })
@@ -678,7 +679,7 @@ function saveFavorite(question, answer) {
 window.saveFavorite = saveFavorite;
 
 function viewFavorites() {
-  fetch("http://127.0.0.1:5000/favorites", {
+  fetch("${BASE_URL}/favorites", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: loggedInUser.email })
@@ -697,7 +698,7 @@ function viewFavorites() {
 }
 
 function deleteFavorite(question) {
-  fetch("http://127.0.0.1:5000/delete-favorite", {
+  fetch("${BASE_URL}/delete-favorite", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question, email: loggedInUser.email })
@@ -710,7 +711,7 @@ function deleteFavorite(question) {
 }
 
 function clearFavorites() {
-  fetch("http://127.0.0.1:5000/clear-favorites", {
+  fetch("${BASE_URL}/clear-favorites", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: loggedInUser.email })
@@ -764,7 +765,7 @@ function loadChatHistory() {
     document.getElementById("chat-box").innerHTML = "";
     return;
   }
-  fetch("http://127.0.0.1:5000/chat-history", {
+  fetch("${BASE_URL}/chat-history", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: loggedInUser.email })
@@ -789,7 +790,7 @@ function clearChatHistory() {
     return;
   }
   if (!confirm("Are you sure you want to clear your chat history? This cannot be undone.")) return;
-  fetch("http://127.0.0.1:5000/clear-chat-history", {
+  fetch("/clear-chat-history", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: loggedInUser.email })
@@ -1022,7 +1023,7 @@ document.getElementById('contact-form').onsubmit = async function(e) {
   }
   status.textContent = 'Sending...';
   try {
-    const res = await fetch('http://127.0.0.1:5000/send-message', {
+    const res = await fetch('${BASE_URL}/send-message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, message })
